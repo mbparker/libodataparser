@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibODataParser", "LibODataParser\LibODataParser.csproj", "{CA115802-0E23-4E2E-871A-75AF2C724034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibODataParser.Tests", "LibODataParser.Tests\LibODataParser.Tests.csproj", "{F6FB6E70-45AC-44D7-BAEB-979B9C6EF270}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA115802-0E23-4E2E-871A-75AF2C724034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA115802-0E23-4E2E-871A-75AF2C724034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA115802-0E23-4E2E-871A-75AF2C724034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA115802-0E23-4E2E-871A-75AF2C724034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6FB6E70-45AC-44D7-BAEB-979B9C6EF270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6FB6E70-45AC-44D7-BAEB-979B9C6EF270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6FB6E70-45AC-44D7-BAEB-979B9C6EF270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6FB6E70-45AC-44D7-BAEB-979B9C6EF270}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
