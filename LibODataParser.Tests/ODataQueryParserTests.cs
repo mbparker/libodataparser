@@ -98,7 +98,7 @@ public class ODataQueryParserTests
 
 public class ODataQueryOptionsJsonConverter : JsonConverter
 {
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
         serializer.Serialize(writer, value);
     }
