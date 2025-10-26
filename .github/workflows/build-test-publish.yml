@@ -82,7 +82,10 @@ jobs:
       id: gitversion
       uses: gittools/actions/gitversion/execute@v4
       with:
-        updateProjectFiles: true      
+        updateProjectFiles: true
+
+    - name: Print Calculated Version
+      run: echo ${{ steps.gitversion.outputs.MajorMinorPatch }}
 
     - name: Restore dependencies
       run: dotnet restore
