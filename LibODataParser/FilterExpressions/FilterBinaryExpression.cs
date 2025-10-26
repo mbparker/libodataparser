@@ -5,14 +5,14 @@ namespace LibODataParser.FilterExpressions;
 /// <summary>
 /// Represents a binary operation (e.g., eq, ne, gt, lt, and, or)
 /// </summary>
-public class BinaryExpression : FilterExpression
+public class FilterBinaryExpression : FilterExpression
 {
     public FilterExpression Left { get; set; }
     public BinaryOperator Operator { get; set; }
     public FilterExpression Right { get; set; }
 
-    public BinaryExpression(FilterExpression left, BinaryOperator op, FilterExpression right)
-        : base(nameof(BinaryExpression))
+    public FilterBinaryExpression(FilterExpression left, BinaryOperator op, FilterExpression right)
+        : base(nameof(FilterBinaryExpression))
     {
         Left = left;
         Operator = op;

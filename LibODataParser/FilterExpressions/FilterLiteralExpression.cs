@@ -5,13 +5,13 @@ namespace LibODataParser.FilterExpressions;
 /// <summary>
 /// Represents a literal value (string, number, boolean, null)
 /// </summary>
-public class LiteralExpression : FilterExpression
+public class FilterLiteralExpression : FilterExpression
 {
     public object Value { get; set; }
     public LiteralType Type { get; set; }
 
-    public LiteralExpression(object value, LiteralType type)
-        : base(nameof(LiteralExpression))
+    public FilterLiteralExpression(object value, LiteralType type)
+        : base(nameof(FilterLiteralExpression))
     {
         Value = value;
         Type = type;

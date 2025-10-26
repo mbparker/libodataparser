@@ -5,13 +5,13 @@ namespace LibODataParser.FilterExpressions;
 /// <summary>
 /// Represents a unary operation (e.g., not)
 /// </summary>
-public class UnaryExpression : FilterExpression
+public class FilterUnaryExpression : FilterExpression
 {
     public UnaryOperator Operator { get; set; }
     public FilterExpression Operand { get; set; }
 
-    public UnaryExpression(UnaryOperator op, FilterExpression operand)
-        : base(nameof(UnaryExpression))
+    public FilterUnaryExpression(UnaryOperator op, FilterExpression operand)
+        : base(nameof(FilterUnaryExpression))
     {
         Operator = op;
         Operand = operand;

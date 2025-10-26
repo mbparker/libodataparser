@@ -3,13 +3,13 @@ namespace LibODataParser.FilterExpressions;
 /// <summary>
 /// Represents a function call (e.g., contains, startswith, endswith)
 /// </summary>
-public class FunctionExpression : FilterExpression
+public class FilterFunctionExpression : FilterExpression
 {
     public string FunctionName { get; set; }
     public List<FilterExpression> Arguments { get; set; }
 
-    public FunctionExpression(string functionName, List<FilterExpression> arguments)
-        : base(nameof(FunctionExpression))
+    public FilterFunctionExpression(string functionName, List<FilterExpression> arguments)
+        : base(nameof(FilterFunctionExpression))
     {
         FunctionName = functionName;
         Arguments = arguments ?? new List<FilterExpression>();

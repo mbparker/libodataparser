@@ -3,12 +3,12 @@ namespace LibODataParser.FilterExpressions;
 /// <summary>
 /// Represents a property/field reference
 /// </summary>
-public class PropertyExpression : FilterExpression
+public class FilterPropertyExpression : FilterExpression
 {
     public string PropertyName { get; set; }
 
-    public PropertyExpression(string propertyName)
-        : base(nameof(PropertyExpression))
+    public FilterPropertyExpression(string propertyName)
+        : base(nameof(FilterPropertyExpression))
     {
         PropertyName = propertyName;
     }

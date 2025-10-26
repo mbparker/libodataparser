@@ -26,7 +26,7 @@ internal class FilterExpressionParser
         {
             _tokenizer.Advance();
             var right = ParseAndExpression();
-            left = new BinaryExpression(left, BinaryOperator.Or, right);
+            left = new FilterBinaryExpression(left, BinaryOperator.Or, right);
         }
 
         return left;
@@ -41,7 +41,7 @@ internal class FilterExpressionParser
         {
             _tokenizer.Advance();
             var right = ParseComparisonExpression();
-            left = new BinaryExpression(left, BinaryOperator.And, right);
+            left = new FilterBinaryExpression(left, BinaryOperator.And, right);
         }
 
         return left;
@@ -70,7 +70,7 @@ internal class FilterExpressionParser
             {
                 _tokenizer.Advance();
                 var right = ParseAdditiveExpression();
-                return new BinaryExpression(left, op.Value, right);
+                return new FilterBinaryExpression(left, op.Value, right);
             }
         }
 
@@ -93,7 +93,7 @@ internal class FilterExpressionParser
             {
                 _tokenizer.Advance();
                 var right = ParseMultiplicativeExpression();
-                left = new BinaryExpression(left, op.Value, right);
+                left = new FilterBinaryExpression(left, op.Value, right);
             }
             else
             {
@@ -121,7 +121,7 @@ internal class FilterExpressionParser
             {
                 _tokenizer.Advance();
                 var right = ParseUnaryExpression();
-                left = new BinaryExpression(left, op.Value, right);
+                left = new FilterBinaryExpression(left, op.Value, right);
             }
             else
             {
@@ -139,7 +139,7 @@ internal class FilterExpressionParser
         {
             _tokenizer.Advance();
             var operand = ParseUnaryExpression();
-            return new UnaryExpression(UnaryOperator.Not, operand);
+            return new FilterUnaryExpression(UnaryOperator.Not, operand);
         }
 
         return ParsePrimaryExpression();
@@ -167,7 +167,7 @@ internal class FilterExpressionParser
         {
             var value = _tokenizer.Current.Value;
             _tokenizer.Advance();
-            return new LiteralExpression(value, LiteralType.String);
+            return new FilterLiteralExpression(value, LiteralType.String);
         }
 
         if (_tokenizer.Match(TokenType.DateTime))
@@ -175,7 +175,7 @@ internal class FilterExpressionParser
             var value = _tokenizer.Current.Value;
             _tokenizer.Advance();
             if (DateTime.TryParse(value, null, DateTimeStyles.AdjustToUniversal, out var dateTimeValue))
-                return new LiteralExpression(dateTimeValue, LiteralType.DateTime);
+                return new FilterLiteralExpression(dateTimeValue, LiteralType.DateTime);
         }
 
         if (_tokenizer.Match(TokenType.Number))
@@ -192,27 +192,27 @@ internal class FilterExpressionParser
                 {
                     if (hexString.EndsWith("ul", StringComparison.OrdinalIgnoreCase) ||
                         hexString.EndsWith("lu", StringComparison.OrdinalIgnoreCase))
-                        return new LiteralExpression(ulong.Parse(hexString.Remove(hexString.Length - 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture), LiteralType.Number);
+                        return new FilterLiteralExpression(ulong.Parse(hexString.Remove(hexString.Length - 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture), LiteralType.Number);
                     var valueOnly = hexString.Remove(hexString.Length - 1);
                     switch (char.ToLower(hexString[^1]))
                     {
                         case 'l':
-                            return new LiteralExpression(long.Parse(valueOnly, NumberStyles.HexNumber, CultureInfo.InvariantCulture), LiteralType.Number);
+                            return new FilterLiteralExpression(long.Parse(valueOnly, NumberStyles.HexNumber, CultureInfo.InvariantCulture), LiteralType.Number);
                         case 'u':
-                            return new LiteralExpression(ulong.Parse(valueOnly, NumberStyles.HexNumber, CultureInfo.InvariantCulture), LiteralType.Number);
+                            return new FilterLiteralExpression(ulong.Parse(valueOnly, NumberStyles.HexNumber, CultureInfo.InvariantCulture), LiteralType.Number);
 
                     }
                 }
                 
                 if (int.TryParse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var intValue))
-                    return new LiteralExpression(intValue, LiteralType.Number);
+                    return new FilterLiteralExpression(intValue, LiteralType.Number);
                 if (long.TryParse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var longValue))
-                    return new LiteralExpression(longValue, LiteralType.Number);
+                    return new FilterLiteralExpression(longValue, LiteralType.Number);
             }
 
             // Handle 2 char suffix - unsigned long
             if (value.EndsWith("ul", StringComparison.OrdinalIgnoreCase) || value.EndsWith("lu", StringComparison.OrdinalIgnoreCase))
-                return new LiteralExpression(ulong.Parse(value.Remove(value.Length - 2)), LiteralType.Number);
+                return new FilterLiteralExpression(ulong.Parse(value.Remove(value.Length - 2)), LiteralType.Number);
             
             // Handle supported numeric suffixes
             if ("ULDMFulmdf".Contains(value[^1]))
@@ -221,15 +221,15 @@ internal class FilterExpressionParser
                 switch (char.ToLower(value[^1]))
                 {
                     case 'f':
-                        return new LiteralExpression(float.Parse(valueOnly), LiteralType.Number);
+                        return new FilterLiteralExpression(float.Parse(valueOnly), LiteralType.Number);
                     case 'd':
-                        return new LiteralExpression(double.Parse(valueOnly), LiteralType.Number);
+                        return new FilterLiteralExpression(double.Parse(valueOnly), LiteralType.Number);
                     case 'm':
-                        return new LiteralExpression(decimal.Parse(valueOnly), LiteralType.Number);
+                        return new FilterLiteralExpression(decimal.Parse(valueOnly), LiteralType.Number);
                     case 'l':
-                        return new LiteralExpression(long.Parse(valueOnly), LiteralType.Number);
+                        return new FilterLiteralExpression(long.Parse(valueOnly), LiteralType.Number);
                     case 'u':
-                        return new LiteralExpression(ulong.Parse(valueOnly), LiteralType.Number);
+                        return new FilterLiteralExpression(ulong.Parse(valueOnly), LiteralType.Number);
 
                 }
             }
@@ -239,19 +239,19 @@ internal class FilterExpressionParser
             {
                 // We know it's a real number
                 if (float.TryParse(value, out var floatValue))
-                    return new LiteralExpression(floatValue, LiteralType.Number);
+                    return new FilterLiteralExpression(floatValue, LiteralType.Number);
                 if (double.TryParse(value, out var doubleValue))
-                    return new LiteralExpression(doubleValue, LiteralType.Number);
+                    return new FilterLiteralExpression(doubleValue, LiteralType.Number);
                 if (decimal.TryParse(value, out var decimalValue))
-                    return new LiteralExpression(decimalValue, LiteralType.Number);
+                    return new FilterLiteralExpression(decimalValue, LiteralType.Number);
             }
             else
             {
                 // It's an integer
                 if (int.TryParse(value, out var intValue))
-                    return new LiteralExpression(intValue, LiteralType.Number);
+                    return new FilterLiteralExpression(intValue, LiteralType.Number);
                 if (long.TryParse(value, out var longValue))
-                    return new LiteralExpression(longValue, LiteralType.Number);
+                    return new FilterLiteralExpression(longValue, LiteralType.Number);
             }
 
             // Wtf did you pass me??
@@ -262,13 +262,13 @@ internal class FilterExpressionParser
         {
             var value = bool.Parse(_tokenizer.Current.Value);
             _tokenizer.Advance();
-            return new LiteralExpression(value, LiteralType.Boolean);
+            return new FilterLiteralExpression(value, LiteralType.Boolean);
         }
 
         if (_tokenizer.Match(TokenType.Null))
         {
             _tokenizer.Advance();
-            return new LiteralExpression(null, LiteralType.Null);
+            return new FilterLiteralExpression(null, LiteralType.Null);
         }
 
         // Property reference
@@ -276,7 +276,7 @@ internal class FilterExpressionParser
         {
             var propertyName = _tokenizer.Current.Value;
             _tokenizer.Advance();
-            return new PropertyExpression(propertyName);
+            return new FilterPropertyExpression(propertyName);
         }
 
         throw new InvalidOperationException($"Unexpected token: {_tokenizer.Current}");
@@ -304,6 +304,6 @@ internal class FilterExpressionParser
 
         _tokenizer.Consume(TokenType.CloseParen);
 
-        return new FunctionExpression(functionName, arguments);
+        return new FilterFunctionExpression(functionName, arguments);
     }
 }
