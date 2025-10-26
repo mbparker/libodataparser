@@ -11,8 +11,13 @@ public abstract class FilterExpression
     }
     public string TypeName { get; set; }
 
+    public bool Is<T>() where T : FilterExpression
+    {
+        return this is T;
+    }
+    
     public T As<T>() where T : FilterExpression
     {
-        return (T)this;
+        return this as T;
     }
 }
