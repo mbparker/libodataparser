@@ -276,6 +276,12 @@ internal class FilterExpressionParser
         {
             var propertyName = _tokenizer.Current.Value;
             _tokenizer.Advance();
+            while (_tokenizer.Match(TokenType.Property))
+            {
+                propertyName += "." + _tokenizer.Current.Value;
+                _tokenizer.Advance();
+            }
+            
             return new FilterPropertyExpression(propertyName);
         }
 

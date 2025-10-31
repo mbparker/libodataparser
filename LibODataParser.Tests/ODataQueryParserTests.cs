@@ -86,6 +86,8 @@ public class ODataQueryParserTests
         yield return ["$filter=createdDate ge 2025-02-03t12:05:01z", GetExpected("{\"FilterRaw\":\"createdDate ge 2025-02-03t12:05:01z\",\"Filter\":{\"Left\":{\"PropertyName\":\"createdDate\",\"TypeName\":\"FilterPropertyExpression\"},\"Operator\":\"GreaterThanOrEqual\",\"Right\":{\"Value\":\"2025-02-03T12:05:01Z\",\"Type\":\"DateTime\",\"TypeName\":\"FilterLiteralExpression\"},\"TypeName\":\"FilterBinaryExpression\"},\"OrderBy\":[],\"Top\":null,\"Skip\":null,\"Count\":null,\"RawQuery\":\"$filter=createdDate ge 2025-02-03t12:05:01z\"}")];
         yield return ["$filter=status eq 'active'&$orderby=createdDate desc&$top=20&$skip=3&$count=true", GetExpected("{\"FilterRaw\":\"status eq 'active'\",\"Filter\":{\"Left\":{\"PropertyName\":\"status\",\"TypeName\":\"FilterPropertyExpression\"},\"Operator\":\"Equal\",\"Right\":{\"Value\":\"active\",\"Type\":\"String\",\"TypeName\":\"FilterLiteralExpression\"},\"TypeName\":\"FilterBinaryExpression\"},\"OrderBy\":[{\"Property\":\"createdDate\",\"Direction\":\"Descending\"}],\"Top\":20,\"Skip\":3,\"Count\":true,\"RawQuery\":\"$filter=status eq 'active'&$orderby=createdDate desc&$top=20&$skip=3&$count=true\"}")];
         yield return ["$filter=status eq 'active'&$orderby=createdDate desc&$top=20&$skip=3&$count=false", GetExpected("{\"FilterRaw\":\"status eq 'active'\",\"Filter\":{\"Left\":{\"PropertyName\":\"status\",\"TypeName\":\"FilterPropertyExpression\"},\"Operator\":\"Equal\",\"Right\":{\"Value\":\"active\",\"Type\":\"String\",\"TypeName\":\"FilterLiteralExpression\"},\"TypeName\":\"FilterBinaryExpression\"},\"OrderBy\":[{\"Property\":\"createdDate\",\"Direction\":\"Descending\"}],\"Top\":20,\"Skip\":3,\"Count\":false,\"RawQuery\":\"$filter=status eq 'active'&$orderby=createdDate desc&$top=20&$skip=3&$count=false\"}")];
+        yield return ["$filter=prop.value.subValue eq 'some value'", GetExpected("{\"FilterRaw\":\"prop.value.subValue eq 'some value'\",\"Filter\":{\"Left\":{\"PropertyName\":\"prop.value.subValue\",\"TypeName\":\"FilterPropertyExpression\"},\"Operator\":\"Equal\",\"Right\":{\"Value\":\"some value\",\"Type\":\"String\",\"TypeName\":\"FilterLiteralExpression\"},\"TypeName\":\"FilterBinaryExpression\"},\"OrderBy\":[],\"Top\":null,\"Skip\":null,\"Count\":null,\"RawQuery\":\"$filter=prop.value.subValue eq 'some value'\"}")];
+        yield return ["$orderby=obj.value.sortOrder desc&$count=true", GetExpected("{\"FilterRaw\":null,\"Filter\":null,\"OrderBy\":[{\"Property\":\"obj.value.sortOrder\",\"Direction\":\"Descending\"}],\"Top\":null,\"Skip\":null,\"Count\":true,\"RawQuery\":\"$orderby=obj.value.sortOrder desc&$count=true\"}")];
     }
 
     private static ODataQueryOptions GetExpected(string json)
@@ -105,28 +107,44 @@ public class ODataQueryOptionsJsonConverter : JsonConverter
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        var jo = JObject.Load(reader);
+
+        JObject jo;
+        try
+        {
+            jo = JObject.Load(reader);
+        }
+        catch (JsonReaderException)
+        {
+            // Blows chunks when filter isn't there.
+            reader.Skip();
+            return null;
+        }
+
         if (jo["TypeName"]?.Value<string>() == nameof(FilterBinaryExpression))
         {
             return jo.ToObject<FilterBinaryExpression>(serializer);
         }
+
         if (jo["TypeName"]?.Value<string>() == nameof(FilterFunctionExpression))
         {
             return jo.ToObject<FilterFunctionExpression>(serializer);
         }
+
         if (jo["TypeName"]?.Value<string>() == nameof(FilterLiteralExpression))
         {
             return jo.ToObject<FilterLiteralExpression>(serializer);
         }
+
         if (jo["TypeName"]?.Value<string>() == nameof(FilterPropertyExpression))
         {
             return jo.ToObject<FilterPropertyExpression>(serializer);
         }
+
         if (jo["TypeName"]?.Value<string>() == nameof(FilterUnaryExpression))
         {
             return jo.ToObject<FilterUnaryExpression>(serializer);
         }
-
+        
         return null;
     }
 
