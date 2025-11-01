@@ -159,10 +159,13 @@ internal class FilterTokenizer
             {
                 sb.Append(_input[_position]);
                 _position++;
-                _tokens.Add(new Token(TokenType.DateTime, sb.ToString(), start));
             }
             
-            _tokens.Add(new Token(TokenType.String, sb.ToString(), start));
+            var result = sb.ToString();
+            if (DateTimeOffset.TryParse(result, out var offset) || DateTime.TryParse(result, out var dateTime))
+                _tokens.Add(new Token(TokenType.DateTime, result, start));
+            else
+                _tokens.Add(new Token(TokenType.String, result, start));
         }
         else // Check for type suffix (U, L, D, M, F)
         if (_position < _input.Length && "ULDMFulmdf".Contains(_input[_position]))

@@ -9,11 +9,11 @@
         <Authors>Mathew Parker</Authors>
         <Copyright>Copyright (c) 2025, Mathew Parker</Copyright>
         <RepositoryUrl>https://github.com/mbparker/libodataparser</RepositoryUrl>
-        <AssemblyVersion>1.0.3.0</AssemblyVersion>
-        <FileVersion>1.0.3.0</FileVersion>
+        <AssemblyVersion>1.0.4.0</AssemblyVersion>
+        <FileVersion>1.0.4.0</FileVersion>
         <Description>A parser for OData queries that generates data model agnostic tree of objects that represent the query. These objects can be consumed directly for execution or mapped to expressions for use with an ORM.</Description>
         <PackageTags>OData</PackageTags>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
     </PropertyGroup>
 
     <ItemGroup>
