@@ -187,7 +187,7 @@ internal class FilterTokenizer
         int start = _position;
         var sb = new StringBuilder();
 
-        while (_position < _input.Length && (char.IsLetterOrDigit(_input[_position]) || _input[_position] == '_'))
+        while (_position < _input.Length && (char.IsLetterOrDigit(_input[_position]) || "_.".Contains(_input[_position])))
         {
             sb.Append(_input[_position]);
             _position++;
