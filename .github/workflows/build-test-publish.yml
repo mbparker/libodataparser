@@ -61,7 +61,49 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Pack
-      run: dotnet pack LibODataParser/LibODataParser.csproj --configuration Release --no-build --output ./nupkg     
+      run: dotnet pack LibODataParser/LibODataParser.csproj --configuration Release --no-build --output ./nupkg
+
+    - name: Upload Nuget Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: LibODataParser.nupkg
+        path: |
+          ./nupkg/LibODataParser.*.nupkg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+
+    - name: Upload Nuget Symbol Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: LibODataParser.snupkg
+        path: |
+          ./nupkg/LibODataParser.*.snupkg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+
+    - name: Download Nuget Package
+      uses: actions/download-artifact@v4
+      with:
+        name: LibODataParser.nupkg
+        path: artifacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+
+    - name: Download Nuget Symbol Package
+      uses: actions/download-artifact@v4
+      with:
+        name: LibODataParser.snupkg
+        path: artifacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}        
+
+    - name: Attach Artifacts to Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          artifacts/**
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - name: NuGet login (OIDC → temp API key)
       uses: NuGet/login@v1
@@ -73,4 +115,3 @@ jobs:
     - name: Publish to NuGet
       run: |
         dotnet nuget push ./nupkg/*.*pkg --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-        
