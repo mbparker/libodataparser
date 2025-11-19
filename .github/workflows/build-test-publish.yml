@@ -70,7 +70,7 @@ jobs:
         path: |
           ./nupkg/LibODataParser.*.nupkg
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }} 
 
     - name: Upload Nuget Symbol Package
       uses: actions/upload-artifact@v4
@@ -79,7 +79,7 @@ jobs:
         path: |
           ./nupkg/LibODataParser.*.snupkg
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }} 
 
     - name: Download Nuget Package
       uses: actions/download-artifact@v4
@@ -87,7 +87,7 @@ jobs:
         name: LibODataParser.nupkg
         path: artifacts
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }} 
 
     - name: Download Nuget Symbol Package
       uses: actions/download-artifact@v4
@@ -95,7 +95,7 @@ jobs:
         name: LibODataParser.snupkg
         path: artifacts
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}        
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }}        
 
     - name: Attach Artifacts to Release
       uses: softprops/action-gh-release@v2
@@ -103,7 +103,7 @@ jobs:
         files: |
           artifacts/**
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }}
 
     - name: NuGet login (OIDC → temp API key)
       uses: NuGet/login@v1
