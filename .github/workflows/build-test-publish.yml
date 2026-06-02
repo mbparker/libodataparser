@@ -16,14 +16,14 @@ jobs:
       contents: read
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-2025-vs2026, macos-latest]
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6.0.2
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5.2.0
       with:
         dotnet-version: '10.0.x'
 
@@ -47,10 +47,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6.0.2
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5.2.0
       with:
         dotnet-version: '10.0.x'
 
@@ -64,7 +64,7 @@ jobs:
       run: dotnet pack LibODataParser/LibODataParser.csproj --configuration Release --no-build --output ./nupkg
 
     - name: Upload Nuget Package
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: LibODataParser.nupkg
         path: |
@@ -73,7 +73,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }} 
 
     - name: Upload Nuget Symbol Package
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: LibODataParser.snupkg
         path: |
@@ -82,7 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }} 
 
     - name: Download Nuget Package
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8.0.1
       with:
         name: LibODataParser.nupkg
         path: artifacts
@@ -90,7 +90,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }} 
 
     - name: Download Nuget Symbol Package
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8.0.1
       with:
         name: LibODataParser.snupkg
         path: artifacts
@@ -98,7 +98,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }}        
 
     - name: Attach Artifacts to Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         files: |
           artifacts/**
