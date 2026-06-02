@@ -100,10 +100,9 @@ jobs:
     - name: Attach Artifacts to Release
       uses: softprops/action-gh-release@v3
       with:
+        token: ${{ secrets.GH_TOKEN_PUB }}
         files: |
           artifacts/**
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUB }}
 
     - name: NuGet login (OIDC → temp API key)
       uses: NuGet/login@v1
