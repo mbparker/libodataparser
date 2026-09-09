@@ -16,7 +16,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2025-vs2026, macos-latest]
+        os: [windows-2025-vs2026, macos-26, ubuntu-26.04]
 
     steps:
     - name: Checkout code
